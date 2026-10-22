@@ -20,6 +20,12 @@ parser.add_argument(
     help="Critical threshold percentage (default: 90)"
 )
 
+parser.add_argument(
+    "--disk-path",
+    default="C:\\",
+    help="Disk path to monitor (default: C:\\)"
+)
+
 args = parser.parse_args()
 
 if args.warning >= args.critical:
@@ -31,7 +37,12 @@ print ("================================\n\tSERVER HEALTH CHECK\n===============
 
 cpu = psutil.cpu_percent(interval=1)
 memory = psutil.virtual_memory().percent
-disk = psutil.disk_usage("C:\\").percent
+
+try:
+    disk = psutil.disk_usage(args.disk_path).percent
+except FileNotFoundError:
+    parser.error(f"Disk path does not exist: {args.disk_path}")
+
 
 resources = {
     "CPU": cpu,
