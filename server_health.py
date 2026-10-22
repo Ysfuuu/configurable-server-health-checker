@@ -22,6 +22,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+if args.warning >= args.critical:
+    parser.error("Warning threshold must be lower than critical threshold.")
+
 #print(args.warning)
 
 print ("================================\n\tSERVER HEALTH CHECK\n================================")
